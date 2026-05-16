@@ -23,12 +23,6 @@ jobs:
       
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction
-      
-      - name: Prepare database
-        run: |
-          mkdir -p database
-          touch database/testing.sqlite
-          chmod 666 database/testing.sqlite
 
       - name: Prepare environment
         run: |

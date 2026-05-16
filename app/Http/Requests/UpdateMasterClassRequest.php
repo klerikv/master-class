@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\MasterClass;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateMasterClassRequest extends FormRequest
 {
     public function authorize(): bool
     {
+        /** @var MasterClass $masterClass */
         $masterClass = $this->route('masterClass');
-        return auth()->check() && 
-               auth()->user()->isInstructor() && 
-               $masterClass && 
+
+        return auth()->check() &&
+               auth()->user()->isInstructor() &&
                $masterClass->instructor_id === auth()->id();
     }
 
@@ -31,7 +33,7 @@ class UpdateMasterClassRequest extends FormRequest
             'description.required' => 'Введите описание мастер-класса',
             'description.string' => 'Описание должно быть текстом',
             'description.max' => 'Описание не может быть длиннее 500 символов',
-            
+
             'price.required' => 'Укажите стоимость мастер-класса',
             'price.integer' => 'Стоимость должна быть целым числом и не выше 100 000 рублей',
             'price.min' => 'Стоимость не может быть отрицательной',

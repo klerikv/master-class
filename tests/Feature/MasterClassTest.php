@@ -18,9 +18,9 @@ class MasterClassTest extends TestCase
         $masterClass = MasterClass::factory()->create([
             'craft_type_id' => $craftType->id,
         ]);
-        
-        $response = $this->get('/show/' . $craftType->id);
-        
+
+        $response = $this->get('/show/'.$craftType->id);
+
         $response->assertStatus(200);
         $response->assertSee($masterClass->title);
     }
@@ -29,7 +29,7 @@ class MasterClassTest extends TestCase
     {
         $instructor = User::factory()->instructor()->create();
         $craftType = CraftType::factory()->create();
-        
+
         $response = $this->actingAs($instructor)->post('/instructor/create', [
             'craft_type_id' => $craftType->id,
             'title' => 'Новый мастер-класс',
@@ -39,7 +39,7 @@ class MasterClassTest extends TestCase
             'max_participants' => 10,
             'price' => 1000,
         ]);
-        
+
         $response->assertRedirect('/instructor/dashboard');
         $this->assertDatabaseHas('master_classes', [
             'title' => 'Новый мастер-класс',
@@ -51,7 +51,7 @@ class MasterClassTest extends TestCase
     {
         $visitor = User::factory()->visitor()->create();
         $craftType = CraftType::factory()->create();
-        
+
         $response = $this->actingAs($visitor)->post('/instructor/create', [
             'craft_type_id' => $craftType->id,
             'title' => 'Новый мастер-класс',
@@ -61,7 +61,7 @@ class MasterClassTest extends TestCase
             'max_participants' => 10,
             'price' => 1000,
         ]);
-        
+
         $response->assertStatus(403);
     }
 
@@ -71,12 +71,12 @@ class MasterClassTest extends TestCase
         $masterClass = MasterClass::factory()->create([
             'instructor_id' => $instructor->id,
         ]);
-        
-        $response = $this->actingAs($instructor)->put('/instructor/update/' . $masterClass->id, [
+
+        $response = $this->actingAs($instructor)->put('/instructor/update/'.$masterClass->id, [
             'description' => 'Новое описание',
             'price' => 2000,
         ]);
-        
+
         $response->assertRedirect('/instructor/dashboard');
         $this->assertDatabaseHas('master_classes', [
             'id' => $masterClass->id,
@@ -92,12 +92,12 @@ class MasterClassTest extends TestCase
         $masterClass = MasterClass::factory()->create([
             'instructor_id' => $instructor1->id,
         ]);
-        
-        $response = $this->actingAs($instructor2)->put('/instructor/update/' . $masterClass->id, [
+
+        $response = $this->actingAs($instructor2)->put('/instructor/update/'.$masterClass->id, [
             'description' => 'Новое описание',
             'price' => 2000,
         ]);
-        
+
         $response->assertStatus(403);
     }
 }

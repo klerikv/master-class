@@ -20,10 +20,10 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:6', 'confirmed'],
             'phone' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'regex:/^\+7\d{10}$/',
-                'unique:users,phone'
+                'unique:users,phone',
             ],
         ];
     }
@@ -36,15 +36,15 @@ class RegisterRequest extends FormRequest
             'full_name.max' => 'ФИО не может быть длиннее 255 символов',
             'full_name.regex' => 'ФИО может содержать только буквы, пробелы и дефисы',
             'full_name.min_words' => 'Пожалуйста, введите минимум фамилию и имя',
-            
+
             'email.required' => 'Пожалуйста, укажите email адрес',
             'email.email' => 'Введите корректный email адрес',
             'email.unique' => 'Пользователь с таким email уже зарегистрирован',
-            
+
             'password.required' => 'Пожалуйста, введите пароль',
             'password.min' => 'Пароль должен содержать минимум 6 символов',
             'password.confirmed' => 'Пароли не совпадают',
-            
+
             'phone.required' => 'Пожалуйста, укажите номер телефона',
             'phone.string' => 'Номер телефона должен быть строкой',
             'phone.regex' => 'Номер телефона должен быть в формате +7XXXXXXXXXX',

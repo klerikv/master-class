@@ -10,7 +10,8 @@ class RegisterRequestTest extends TestCase
 {
     private function validate($data)
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
+
         return Validator::make($data, $request->rules());
     }
 
@@ -23,7 +24,7 @@ class RegisterRequestTest extends TestCase
             'password_confirmation' => 'password123',
             'phone' => '+79031234567',
         ]);
-        
+
         $this->assertTrue($validator->passes());
     }
 
@@ -36,7 +37,7 @@ class RegisterRequestTest extends TestCase
             'password_confirmation' => 'password123',
             'phone' => '+79031234567',
         ]);
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('full_name', $validator->errors()->toArray());
     }
@@ -50,7 +51,7 @@ class RegisterRequestTest extends TestCase
             'password_confirmation' => 'password123',
             'phone' => '+79031234567',
         ]);
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('email', $validator->errors()->toArray());
     }
@@ -64,7 +65,7 @@ class RegisterRequestTest extends TestCase
             'password_confirmation' => '123',
             'phone' => '+79031234567',
         ]);
-        
+
         $this->assertTrue($validator->fails());
     }
 
@@ -77,7 +78,7 @@ class RegisterRequestTest extends TestCase
             'password_confirmation' => 'different',
             'phone' => '+79031234567',
         ]);
-        
+
         $this->assertTrue($validator->fails());
     }
 
@@ -90,7 +91,7 @@ class RegisterRequestTest extends TestCase
             'password_confirmation' => 'password123',
             'phone' => '+7(903)123-45-67',
         ]);
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('phone', $validator->errors()->toArray());
     }

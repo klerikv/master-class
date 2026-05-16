@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\CraftType;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CraftTypeController extends Controller
@@ -17,9 +16,9 @@ class CraftTypeController extends Controller
             ->orderBy('date')
             ->orderBy('time_slot')
             ->get();
-        
+
         $craftTypes = CraftType::all();
-        
+
         return view('craft-type.show', compact('craftType', 'masterClasses', 'craftTypes'));
     }
 }

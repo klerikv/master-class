@@ -22,11 +22,21 @@ class Booking extends Model
         'updated_at' => 'datetime',
     ];
 
+    /**
+     * Summary of user
+     *
+     * @return BelongsTo<User, Booking>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Summary of masterClass
+     *
+     * @return BelongsTo<MasterClass, Booking>
+     */
     public function masterClass(): BelongsTo
     {
         return $this->belongsTo(MasterClass::class);

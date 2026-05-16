@@ -13,7 +13,7 @@ class LoginRequest extends FormRequest
         return true;
     }
 
-    //Правила валидации
+    // Правила валидации
     public function rules(): array
     {
         return [
@@ -23,7 +23,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    //Сообщения об ошибках
+    // Сообщения об ошибках
     public function messages(): array
     {
         return [
@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    //Атрибуты полей
+    // Атрибуты полей
     public function attributes(): array
     {
         return [

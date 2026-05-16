@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone');
             $table->string('role')->default('visitor');
-            #$table->enum('role', ['visitor', 'instructor'])->default('visitor');
+            // $table->enum('role', ['visitor', 'instructor'])->default('visitor');
             $table->string('photo')->nullable();
             $table->timestamps();
         });

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->date('date');
-            $table->enum('time_slot', ['9-11', '11-13', '13-15', '15-17']);
+            $table->string('time_slot')->default('9-11');
+            #$table->enum('time_slot', ['9-11', '11-13', '13-15', '15-17']);
             $table->integer('max_participants');
             $table->integer('price');
             $table->timestamps();

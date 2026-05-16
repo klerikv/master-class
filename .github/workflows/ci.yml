@@ -88,33 +88,49 @@ jobs:
           echo "Approved! Continuing to deployment..."
 
   # Симуляция деплоя
-  simulate-deploy:
-    name: Simulate Deployment
+  simulate-deploy-uat-dev:
+    name: Simulate Deployment main
     runs-on: ubuntu-latest
-    needs: [tests, static-analysis, linting]
+    needs: [tests, static-analysis, linting, manual-approval]
     if: |
-      always() && 
-      (github.ref_name == 'main' && needs.manual-approval.result == 'success') ||
-      (github.ref_name != 'main' && needs.tests.result == 'success' && needs.static-analysis.result == 'success' && needs.linting.result == 'success')
+      github.ref_name == 'main' && needs.tests.result == 'success' && needs.static-analysis.result == 'success' && needs.linting.result == 'success' && needs.manual-approval.result == 'success'
     
     steps:
       - uses: actions/checkout@v4
       
       - name: Setup environment
         run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
             cp .env.prod .env
             echo "Deploying to PRODUCTION with .env.prod"
-          elif [ "${{ github.ref_name }}" = "uat" ]; then
+          
+            php artisan key:generate
+      
+      - name: Simulate deployment
+        run: echo "Deployment simulation completed for ${{ github.ref_name }}"
+
+  # Симуляция деплоя
+  simulate-deploy-main:
+    name: Simulate Deployment DEV/UAT
+    runs-on: ubuntu-latest
+    needs: [tests, static-analysis, linting]
+    if: |
+      github.ref_name != 'main' && needs.tests.result == 'success' && needs.static-analysis.result == 'success' && needs.linting.result == 'success'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup environment
+        run: |
+          if [ "${{ github.ref_name }}" = "uat" ]; then
             cp .env.uat .env
             echo "Deploying to UAT with .env.uat"
           else
             cp .env.dev .env
             echo "Deploying to DEVELOPMENT with .env.dev"
           fi
-          
-          php artisan key:generate
       
+          php artisan key:generate
+
       - name: Simulate deployment
         run: echo "Deployment simulation completed for ${{ github.ref_name }}"
 

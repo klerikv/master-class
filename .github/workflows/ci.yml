@@ -73,18 +73,18 @@ jobs:
       - name: Check code style
         run: vendor/bin/pint --test
 
-# Ручной апрув
-manual-approval:
-  name: Manual Approval Required
-  runs-on: ubuntu-latest
-  needs: [tests, static-analysis, linting]
-  if: github.ref_name == 'main'
-  environment: production
-  steps:
-    - name: Wait for approval
-      run: |
-        echo "Waiting for manual approval..."
-        echo "Approved! Continuing to deployment..."
+  # Ручной апрув
+  manual-approval:
+    name: Manual Approval Required
+    runs-on: ubuntu-latest
+    needs: [tests, static-analysis, linting]
+    if: github.ref_name == 'main'
+    environment: production
+    steps:
+      - name: Wait for approval
+        run: |
+          echo "Waiting for manual approval..."
+          echo "Approved! Continuing to deployment..."
 
   # Симуляция деплоя
   simulate-deploy:
@@ -117,19 +117,4 @@ manual-approval:
       - name: Simulate deployment
         run: echo "Deployment simulation completed for ${{ github.ref_name }}"
 
-# Уведомления
-notification:
-    name: Send Notification
-    runs-on: ubuntu-latest
-    needs: [simulate-deploy]
-    if: always()
-    
-    steps:
-      - name: Check status
-        run: |
-          if [[ "${{ needs.simulate-deploy.result }}" == "success" ]]; then
-            echo "Pipeline completed successfully!"
-          else
-            echo "Pipeline failed!"
-            exit 1
-          fi
+        

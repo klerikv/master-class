@@ -1,0 +1,153 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ develop, uat, main ]
+  pull_request:
+    branches: [ develop, uat, main ]
+
+jobs:
+  # Тесты
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: bcmath, ctype, fileinfo, json, mbstring, pdo, pdo_sqlite, tokenizer, xml
+          coverage: xdebug
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Prepare environment
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
+      
+      - name: Run migrations
+        run: php artisan migrate --force
+      
+      - name: Run tests with coverage
+        run: php artisan test --coverage --min=50
+
+  # Статический анализ кода
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+      
+      - name: Run Larastan
+        run: vendor/bin/phpstan analyse app --level=5 --error-format=github
+
+  # Линтинг
+  linting:
+    name: Code Style
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+      
+      - name: Check code style
+        run: vendor/bin/pint --test
+
+  # Ручной апрув
+  manual-approval:
+    name: Manual Approval Required
+    runs-on: ubuntu-latest
+    needs: [tests, static-analysis, linting]
+    if: github.ref_name == 'main'
+    environment: production
+    steps:
+      - name: Wait for approval
+        run: |
+          echo "Waiting for manual approval..."
+          echo "Approved! Continuing to deployment..."
+
+  # Симуляция деплоя
+  simulate-deploy-main:
+    name: Simulate Deployment main
+    runs-on: ubuntu-latest
+    needs: [tests, static-analysis, linting, manual-approval]
+    if: |
+      github.ref_name == 'main' && needs.tests.result == 'success' && needs.static-analysis.result == 'success' && needs.linting.result == 'success' && needs.manual-approval.result == 'success'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+        
+      - name: Setup environment
+        run: |
+            cp .env.prod .env
+            echo "Deploying to PRODUCTION with .env.prod"
+          
+            php artisan key:generate
+      
+      - name: Simulate deployment
+        run: echo "Deployment simulation completed for ${{ github.ref_name }}"
+
+  # Симуляция деплоя
+  simulate-deploy-dev-uat:
+    name: Simulate Deployment DEV/UAT
+    runs-on: ubuntu-latest
+    needs: [tests, static-analysis, linting]
+    if: |
+      github.ref_name != 'main' && needs.tests.result == 'success' && needs.static-analysis.result == 'success' && needs.linting.result == 'success'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+      
+      - name: Setup environment
+        run: |
+          if [ "${{ github.ref_name }}" = "uat" ]; then
+            cp .env.uat .env
+            echo "Deploying to UAT with .env.uat"
+          else
+            cp .env.dev .env
+            echo "Deploying to DEVELOPMENT with .env.dev"
+          fi
+      
+          php artisan key:generate
+
+      - name: Simulate deployment
+        run: echo "Deployment simulation completed for ${{ github.ref_name }}"
+
+        

@@ -16,12 +16,12 @@ class BookingTest extends TestCase
     {
         $user = User::factory()->visitor()->create();
         $masterClass = MasterClass::factory()->create(['max_participants' => 5]);
-        
-        $response = $this->actingAs($user)->post('/booking/confirm/' . $masterClass->id, [
+
+        $response = $this->actingAs($user)->post('/booking/confirm/'.$masterClass->id, [
             'action' => 'confirm',
         ]);
-        
-        $response->assertRedirect('/show/' . $masterClass->craft_type_id);
+
+        $response->assertRedirect('/show/'.$masterClass->craft_type_id);
         $this->assertDatabaseHas('bookings', [
             'user_id' => $user->id,
             'master_class_id' => $masterClass->id,
@@ -32,23 +32,23 @@ class BookingTest extends TestCase
     {
         $user = User::factory()->visitor()->create();
         $masterClass = MasterClass::factory()->create(['max_participants' => 5]);
-        
+
         Booking::create([
             'user_id' => $user->id,
             'master_class_id' => $masterClass->id,
         ]);
-        
-        $response = $this->actingAs($user)->post('/booking/confirm/' . $masterClass->id, [
+
+        $response = $this->actingAs($user)->post('/booking/confirm/'.$masterClass->id, [
             'action' => 'confirm',
         ]);
-        
-        $response->assertRedirect('/show/' . $masterClass->craft_type_id);
+
+        $response->assertRedirect('/show/'.$masterClass->craft_type_id);
         $response->assertSessionHas('error');
-        
+
         $count = Booking::where('user_id', $user->id)
             ->where('master_class_id', $masterClass->id)
             ->count();
-        
+
         $this->assertEquals(1, $count);
     }
 
@@ -62,12 +62,12 @@ class BookingTest extends TestCase
             'user_id' => $otherUser->id,
             'master_class_id' => $masterClass->id,
         ]);
-        
-        $response = $this->actingAs($user)->post('/booking/confirm/' . $masterClass->id, [
+
+        $response = $this->actingAs($user)->post('/booking/confirm/'.$masterClass->id, [
             'action' => 'confirm',
         ]);
-        
-        $response->assertRedirect('/show/' . $masterClass->craft_type_id);
+
+        $response->assertRedirect('/show/'.$masterClass->craft_type_id);
         $response->assertSessionHas('error');
     }
 
@@ -75,10 +75,10 @@ class BookingTest extends TestCase
     {
         $user = User::factory()->visitor()->create();
         $masterClass = MasterClass::factory()->past()->create();
-        
-        $response = $this->actingAs($user)->get('/booking/confirm/' . $masterClass->id);
-        
-        $response->assertRedirect('/show/' . $masterClass->craft_type_id);
+
+        $response = $this->actingAs($user)->get('/booking/confirm/'.$masterClass->id);
+
+        $response->assertRedirect('/show/'.$masterClass->craft_type_id);
         $response->assertSessionHas('error');
     }
 
@@ -86,11 +86,11 @@ class BookingTest extends TestCase
     {
         $instructor = User::factory()->instructor()->create();
         $masterClass = MasterClass::factory()->create();
-        
-        $response = $this->actingAs($instructor)->post('/booking/confirm/' . $masterClass->id, [
+
+        $response = $this->actingAs($instructor)->post('/booking/confirm/'.$masterClass->id, [
             'action' => 'confirm',
         ]);
-        
+
         $response->assertRedirect('/');
         $response->assertSessionHas('error');
     }

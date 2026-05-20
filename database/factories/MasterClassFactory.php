@@ -15,7 +15,7 @@ class MasterClassFactory extends Factory
     {
         $timeSlots = ['9-11', '11-13', '13-15', '15-17'];
         $date = $this->faker->dateTimeBetween('+1 day', '+1 month');
-        
+
         return [
             'craft_type_id' => CraftType::factory(),
             'instructor_id' => User::factory()->instructor(),

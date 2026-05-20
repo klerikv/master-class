@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/update/{masterClass}', [InstructorController::class, 'updateMasterClass'])->name('update');
         Route::get('/check-slots', [InstructorController::class, 'checkOccupiedSlots'])->name('check-slots');
     });
-    
+
     Route::get('/booking/confirm/{masterClass}', [BookingController::class, 'showConfirmForm'])->name('booking.confirm-form');
     Route::post('/booking/confirm/{masterClass}', [BookingController::class, 'confirm'])->name('booking.confirm');
 });

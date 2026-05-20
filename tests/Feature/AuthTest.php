@@ -19,7 +19,7 @@ class AuthTest extends TestCase
             'password_confirmation' => 'password123',
             'phone' => '+79031234567',
         ]);
-        
+
         $response->assertRedirect('/');
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com',
@@ -36,7 +36,7 @@ class AuthTest extends TestCase
             'password_confirmation' => '456',
             'phone' => '123',
         ]);
-        
+
         $response->assertSessionHasErrors(['full_name', 'email', 'password', 'phone']);
     }
 
@@ -46,12 +46,12 @@ class AuthTest extends TestCase
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),
         ]);
-        
+
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'password123',
         ]);
-        
+
         $response->assertRedirect('/');
         $this->assertAuthenticated();
     }
@@ -62,12 +62,12 @@ class AuthTest extends TestCase
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),
         ]);
-        
+
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
         ]);
-        
+
         $response->assertSessionHasErrors();
         $this->assertGuest();
     }
@@ -75,9 +75,9 @@ class AuthTest extends TestCase
     public function test_user_can_logout()
     {
         $user = User::factory()->visitor()->create();
-        
+
         $response = $this->actingAs($user)->post('/logout');
-        
+
         $response->assertRedirect('/');
         $this->assertGuest();
     }

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-
 
 class MasterClass extends Model
 {
@@ -31,6 +30,7 @@ class MasterClass extends Model
         'date' => 'date',
     ];
 
+    /** @var array<string, string> */
     public const TIME_SLOTS = [
         '9-11' => '09:00 - 11:00',
         '11-13' => '11:00 - 13:00',
@@ -41,7 +41,7 @@ class MasterClass extends Model
     // Получить читаемое время
     public function getTimeFormattedAttribute(): string
     {
-        return self::TIME_SLOTS[$this->time_slot] ?? $this->time_slot;
+        return self::TIME_SLOTS[$this->time_slot];
     }
 
     protected function dateFullFormatted(): Attribute
@@ -49,21 +49,31 @@ class MasterClass extends Model
         return Attribute::make(
             get: function () {
                 Carbon::setLocale('ru');
+
                 return Carbon::parse($this->date)->translatedFormat('d F Y');
             }
         );
     }
 
+    /**
+     * @return BelongsTo<CraftType, MasterClass>
+     */
     public function craftType(): BelongsTo
     {
         return $this->belongsTo(CraftType::class);
     }
 
+    /**
+     * @return BelongsTo<User, MasterClass>
+     */
     public function instructor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'instructor_id');
     }
 
+    /**
+     * @return HasMany<Booking>
+     */
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
@@ -91,13 +101,13 @@ class MasterClass extends Model
     {
         $date = $this->date;
         $startHour = explode('-', $this->time_slot)[0];
-        $masterClassDateTime = Carbon::parse($date)->setTime((int)$startHour, 0, 0);
+        $masterClassDateTime = Carbon::parse($date)->setTime((int) $startHour, 0, 0);
 
         return $masterClassDateTime->isPast();
     }
 
     public function canBook(): bool
     {
-        return !$this->isPast() && $this->isAvailable();
+        return ! $this->isPast() && $this->isAvailable();
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\User;
 use App\Models\MasterClass;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,7 +14,7 @@ class UserTest extends TestCase
     public function test_user_can_be_visitor()
     {
         $user = User::factory()->visitor()->create();
-        
+
         $this->assertTrue($user->isVisitor());
         $this->assertFalse($user->isInstructor());
     }
@@ -22,7 +22,7 @@ class UserTest extends TestCase
     public function test_user_can_be_instructor()
     {
         $user = User::factory()->instructor()->create();
-        
+
         $this->assertTrue($user->isInstructor());
         $this->assertFalse($user->isVisitor());
     }
@@ -31,7 +31,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->instructor()->create();
         $masterClass = MasterClass::factory()->create(['instructor_id' => $user->id]);
-        
+
         $this->assertTrue($user->instructorMasterClasses->contains($masterClass));
     }
 }

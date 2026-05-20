@@ -55,7 +55,7 @@ class CreateMasterClassRequest extends FormRequest
             'max_participants.min' => 'В группе должно быть минимум 1 место',
             'max_participants.max' => 'В группе может быть максимум 100 мест',
 
-           'price.required' => 'Укажите стоимость мастер-класса',
+            'price.required' => 'Укажите стоимость мастер-класса',
             'price.integer' => 'Стоимость должна быть целым числом и не выше 100 000 рублей',
             'price.min' => 'Стоимость не может быть отрицательной',
             'price.max' => 'Стоимость не может превышать 100 000 рублей',
@@ -75,7 +75,7 @@ class CreateMasterClassRequest extends FormRequest
         ];
     }
 
-    //Дополнительная проверка после основной валидации
+    // Дополнительная проверка после основной валидации
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
@@ -84,7 +84,7 @@ class CreateMasterClassRequest extends FormRequest
                 ->where('date', $this->date)
                 ->where('time_slot', $this->time_slot)
                 ->exists();
-            
+
             if ($isOccupied) {
                 $validator->errors()->add(
                     'time_slot',

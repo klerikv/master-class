@@ -18,6 +18,9 @@ class CraftType extends Model
         'photo',
     ];
 
+    /**
+     * @return HasMany<MasterClass>
+     */
     public function masterClasses(): HasMany
     {
         return $this->hasMany(MasterClass::class);

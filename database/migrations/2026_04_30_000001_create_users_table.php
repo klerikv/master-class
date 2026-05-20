@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +19,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone');
-            $table->enum('role', ['visitor', 'instructor'])->default('visitor');
+            $table->string('role')->default('visitor');
+            // $table->enum('role', ['visitor', 'instructor'])->default('visitor');
             $table->string('photo')->nullable();
             $table->timestamps();
         });

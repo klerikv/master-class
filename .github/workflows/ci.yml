@@ -195,7 +195,6 @@ jobs:
               **Tests**           -> ${{ needs.tests.result }}
               **Static Analysis** -> ${{ needs.static-analysis.result }}
               **Linting**         -> ${{ needs.linting.result }}
-              **Manual Approval** -> ${{ needs.manual-approval.result }}
               **Deployment Main** -> ${{ needs.simulate-deploy-main.result }}
               **Deployment Dev/Uat** -> ${{ needs.simulate-deploy-dev-uat.result }}
 

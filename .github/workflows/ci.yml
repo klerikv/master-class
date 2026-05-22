@@ -165,19 +165,19 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const result = "";
-            if [ "${{ needs.simulate-deploy-main.result }}" = "success" ] || \
-             [ "${{ needs.simulate-deploy-dev-uat.result }}" = "success" ]; then 
-             result = "SUCCESS";
-            elif [ "${{ needs.simulate-deploy-main.result }}" = "failure" ] || \
-                [ "${{ needs.simulate-deploy-dev-uat.result }}" = "failure" ]; then
-                result = "FAILED";
-            elif [ "${{ needs.simulate-deploy-main.result }}" = "cancelled" ] || \
-                [ "${{ needs.simulate-deploy-dev-uat.result }}" = "cancelled" ]; then
-                result = "CANCELLED";
-            else 
+            const deployMainStatus = "${{ needs.simulate-deploy-main.result }}";
+            const deployDevUatStatus = "${{ needs.simulate-deploy-dev-uat.result }}";
+
+            let result = "";
+            if (deployMainStatus === "success" || deployDevUatStatus === "success") {
+              result = "SUCCESS";
+            } else if (deployMainStatus === "failure" || deployDevUatStatus === "failure") {
+              result = "FAILED";
+            } else if (deployMainStatus === "cancelled" || deployDevUatStatus === "cancelled") {
+              result = "CANCELLED";
+            } else {
               result = "SKIPPED";
-            fi
+            }
 
             
             await github.rest.issues.create({

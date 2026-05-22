@@ -157,7 +157,7 @@ jobs:
   notify:
     name: Notify Maintainers
     runs-on: ubuntu-latest
-    needs: [simulate-deploy-main, simulate-deploy-dev-uat]
+    needs: [tests, static-analysis, linting, simulate-deploy-main, simulate-deploy-dev-uat]
     if: always()
     
     steps:
@@ -175,7 +175,9 @@ jobs:
             elif [ "${{ needs.simulate-deploy-main.result }}" = "cancelled" ] || \
                 [ "${{ needs.simulate-deploy-dev-uat.result }}" = "cancelled" ]; then
                 result = "CANCELLED";
-            else result = "SKIPPED"
+            else 
+              result = "SKIPPED";
+            fi
 
             
             await github.rest.issues.create({

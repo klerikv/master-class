@@ -171,12 +171,8 @@ jobs:
             let result = "";
             if (deployMainStatus === "success" || deployDevUatStatus === "success") {
               result = "PASSED";
-            } else if (deployMainStatus === "failure" || deployDevUatStatus === "failure") {
-              result = "FAILED";
-            } else if (deployMainStatus === "cancelled" || deployDevUatStatus === "cancelled") {
-              result = "CANCELLED";
             } else {
-              result = "SKIPPED";
+              result = "FAILED";
             }
 
             

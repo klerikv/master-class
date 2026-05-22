@@ -170,7 +170,7 @@ jobs:
 
             let result = "";
             if (deployMainStatus === "success" || deployDevUatStatus === "success") {
-              result = "SUCCESS";
+              result = "PASSED";
             } else if (deployMainStatus === "failure" || deployDevUatStatus === "failure") {
               result = "FAILED";
             } else if (deployMainStatus === "cancelled" || deployDevUatStatus === "cancelled") {
@@ -192,11 +192,13 @@ jobs:
               **Commit:** ${context.sha}
               **Author:** @${context.actor}
               
-              | Tests           | ${{ needs.tests.result }} |
-              | Static Analysis | ${{ needs.static-analysis.result }} |
-              | Linting         | ${{ needs.linting.result }} |
-              | Manual Approval | ${{ needs.manual-approval.result || 'not required' }} |
-              | Deployment      | ${{ needs.simulate-deploy-main.result || needs.simulate-deploy-dev-uat.result }} |
+              **Tests**           -> ${{ needs.tests.result }}
+              **Static Analysis** -> ${{ needs.static-analysis.result }}
+              **Linting**         -> ${{ needs.linting.result }}
+              **Manual Approval** -> ${{ needs.manual-approval.result || 'not required' }}
+              **Deployment Main** -> ${{ needs.simulate-deploy-main.result }}
+              **Deployment Dev/Uat** -> ${{ needs.simulate-deploy-dev-uat.result }}
+
               `,
               assignees: [context.repo.owner] 
             });

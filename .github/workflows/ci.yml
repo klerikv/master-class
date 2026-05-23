@@ -104,7 +104,9 @@ jobs:
               body: `
               ## CI/CD Pipeline ${status}
               
+              **Status:** ${status}
               **Branch:** ${context.ref}
+              **Commit:** ${context.sha}
               **Author:** @${context.actor}
 
               **Code Quality** -> ${{ needs.checks.result }}

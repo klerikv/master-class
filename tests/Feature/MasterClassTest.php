@@ -19,7 +19,7 @@ class MasterClassTest extends TestCase
             'craft_type_id' => $craftType->id,
         ]);
 
-        $response = $this->get('/show1/'.$craftType->id);
+        $response = $this->get('/show/'.$craftType->id);
 
         $response->assertStatus(200);
         $response->assertSee($masterClass->title);

@@ -94,7 +94,7 @@ jobs:
       - name: Send email
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.yandex.ru
+          server_address: smtp.google.com
           server_port: 465
           secure: true
           username: ${{ secrets.EMAIL_USERNAME }}
@@ -113,5 +113,4 @@ jobs:
             Linting -> ${{ needs.linting.result }}
             Deployment Main -> ${{ needs.simulate-deploy-main.result }}
             Deployment Dev/Uat -> ${{ needs.simulate-deploy-dev-uat.result }}
-
 

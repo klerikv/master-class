@@ -18,7 +18,7 @@ class AuthController extends Controller
 {
     public function showLoginForm(): View
     {
-        return 1;
+        return view('auth.login');
     }
 
     public function showRegisterForm(): View

@@ -106,8 +106,7 @@ jobs:
         
           body: |          
             Status: ${{ needs.deploy.result }}
-            Branch: ${{ context.ref }}
-            Commit: ${{ context.sha }}
+            Branch: ${{ github.ref_name }}
             Author: ${{ context.actor }}
             
             Tests -> ${{ needs.tests.result }}

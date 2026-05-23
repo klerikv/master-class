@@ -84,30 +84,30 @@ jobs:
       - name: Simulate deployment
         run: echo "Deployment simulation completed for ${{ github.ref_name }}"
 
-    notify:
-      name: Commit Comment
-      runs-on: ubuntu-latest
-      needs: [deploy]
-      if: always()
-      
-      steps:
-        - name: Add commit comment
-          uses: actions/github-script@v7
-          with:
-            script: |
-              const status = "${{ needs.deploy.result }}" === "success" ? "SUCCESS" : "FAILED";
+  notify:
+    name: Commit Comment
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: always()
+    
+    steps:
+      - name: Add commit comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = "${{ needs.deploy.result }}" === "success" ? "SUCCESS" : "FAILED";
 
-              await github.rest.repos.createCommitComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                commit_sha: context.sha,
-                body: `
-                ## CI/CD Pipeline ${status}
-                
-                **Branch:** ${context.ref}
-                **Author:** @${context.actor}
+            await github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: `
+              ## CI/CD Pipeline ${status}
+              
+              **Branch:** ${context.ref}
+              **Author:** @${context.actor}
 
-                **Code Quality** -> ${{ needs.checks.result }} |
-                **Deployment** -> ${{ needs.deploy.result }} |
-                `
-              });
+              **Code Quality** -> ${{ needs.checks.result }} |
+              **Deployment** -> ${{ needs.deploy.result }} |
+              `
+            });

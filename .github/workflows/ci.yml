@@ -107,7 +107,6 @@ jobs:
           body: |          
             Status: ${{ needs.deploy.result }}
             Branch: ${{ github.ref_name }}
-            Author: ${{ context.actor }}
             
             Tests -> ${{ needs.tests.result }}
             Static Analysis -> ${{ needs.static-analysis.result }}

@@ -18,10 +18,10 @@
 ### 4. Manual Approval (Ручной аппрув) - ТОЛЬКО для main
 
 ### 5. Simulate Deployment (Симуляция деплоя)
-- Запускается для долгоживущих веток:
--- develop → use .env.dev
--- uat → use .env.uat
--- main → use .env.prod
+Запускается для долгоживущих веток:
+- develop → use .env.dev
+- uat → use .env.uat
+- main → use .env.prod
 
 
 ### 6. Notification (Уведомление)

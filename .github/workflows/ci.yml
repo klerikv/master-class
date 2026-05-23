@@ -56,33 +56,33 @@ jobs:
     if: needs.checks.result == 'success'
     environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
   
-  steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-    
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-interaction --no-progress
+    steps:
+      - uses: actions/checkout@v4
       
-    - name: Setup environment
-      run: |
-        if [ "${{ github.ref_name }}" = "main" ]; then
-          cp .env.prod .env
-          echo "Deploying to PRODUCTION with .env.prod"
-        elif [ "${{ github.ref_name }}" = "uat" ]; then
-          cp .env.uat .env
-          echo "Deploying to UAT with .env.uat"
-        else
-          cp .env.dev .env
-          echo "Deploying to DEVELOPMENT with .env.dev"
-        fi
-        php artisan key:generate
-    
-    - name: Simulate deployment
-      run: echo "Deployment simulation completed for ${{ github.ref_name }}"
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+        
+      - name: Setup environment
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            cp .env.prod .env
+            echo "Deploying to PRODUCTION with .env.prod"
+          elif [ "${{ github.ref_name }}" = "uat" ]; then
+            cp .env.uat .env
+            echo "Deploying to UAT with .env.uat"
+          else
+            cp .env.dev .env
+            echo "Deploying to DEVELOPMENT with .env.dev"
+          fi
+          php artisan key:generate
+      
+      - name: Simulate deployment
+        run: echo "Deployment simulation completed for ${{ github.ref_name }}"
 
   notify:
     name: Notify

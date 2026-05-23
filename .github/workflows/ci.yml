@@ -94,32 +94,25 @@ jobs:
       - name: Send email
         uses: dawidd6/action-send-mail@v3
         with:
-          script: |
-            server_address: smtp.gmail.com
-            server_port: 465
-            secure: true
-            username: ${{ secrets.EMAIL_USERNAME }}
-            password: ${{ secrets.EMAIL_PASSWORD }}
-            subject: "CI/CD Pipeline ${{ needs.deploy.result }} - ${{ github.ref_name }}"
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "CI/CD Pipeline ${{ needs.deploy.result }} - ${{ github.ref_name }}"
 
-            to: ${{ secrets.EMAIL_USERNAME }}
-            from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
-
-
-            const deployMainStatus = "${{ needs.simulate-deploy-main.result }}";
-            const deployDevUatStatus = "${{ needs.simulate-deploy-dev-uat.result }}";
-          
-            body: |
-            ## Pipeline Report
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
+        
+          body: |          
+            Status: ${{ result }}
+            Branch: ${{ context.ref }}
+            Commit: ${{ context.sha }}
+            Author: ${{ context.actor }}
             
-            **Status:** ${result}
-            **Branch:** ${context.ref}
-            **Commit:** ${context.sha}
-            **Author:** @${context.actor}
-            
-            **Tests**           -> ${{ needs.tests.result }}
-            **Static Analysis** -> ${{ needs.static-analysis.result }}
-            **Linting**         -> ${{ needs.linting.result }}
-            **Deployment Main** -> ${{ needs.simulate-deploy-main.result }}
-            **Deployment Dev/Uat** -> ${{ needs.simulate-deploy-dev-uat.result }}
+            Tests -> ${{ needs.tests.result }}
+            Static Analysis -> ${{ needs.static-analysis.result }}
+            Linting -> ${{ needs.linting.result }}
+            Deployment Main -> ${{ needs.simulate-deploy-main.result }}
+            Deployment Dev/Uat -> ${{ needs.simulate-deploy-dev-uat.result }}
 

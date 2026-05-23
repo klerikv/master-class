@@ -3,7 +3,6 @@ name: CI/CD Pipeline
 permissions:
   contents: write
   issues: write
-  contents: read
 
 on:
   push:

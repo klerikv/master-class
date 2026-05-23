@@ -105,7 +105,7 @@ jobs:
           from: "GitHub Actions <${{ secrets.EMAIL_USERNAME }}>"
         
           body: |          
-            Status: ${{ result }}
+            Status: ${{ needs.deploy.result }}
             Branch: ${{ context.ref }}
             Commit: ${{ context.sha }}
             Author: ${{ context.actor }}
